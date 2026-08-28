@@ -1,5 +1,1 @@
-data/
-__pycache__/
-*.pyc
-.env
-.venv/
+data/__pycache__/*.pyc.env
