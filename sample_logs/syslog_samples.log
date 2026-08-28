@@ -1,0 +1,18 @@
+Oct 12 14:32:07 FW01 %ASA-4-106023: Deny tcp src outside:203.0.113.55/443 dst inside:10.1.1.20/8080 by access-group "OUTSIDE_IN"
+Oct 12 14:33:41 FW01 %ASA-4-106023: Deny udp src outside:198.51.100.23/53 dst inside:10.1.1.5/53 by access-group "OUTSIDE_IN"
+Oct 12 14:35:02 FW01 %ASA-4-106023: Deny tcp src outside:192.0.2.77/22 dst inside:10.1.1.20/22 by access-group "OUTSIDE_IN"
+Oct 12 14:36:19 FW01 %ASA-4-106023: Deny icmp src outside:203.0.113.100/0 dst inside:10.1.1.15/0 by access-group "OUTSIDE_IN"
+Oct 12 14:37:50 FW02 %ASA-4-106023: Deny tcp src outside:198.51.100.44/3389 dst inside:10.1.2.10/3389 by access-group "OUTSIDE_IN"
+Oct 12 14:40:12 FW01 %ASA-6-302013: Built outbound TCP connection for outside:203.0.113.60/443 to inside:10.1.1.30/51221
+Oct 12 14:41:35 FW01 %ASA-6-302013: Built inbound TCP connection for outside:198.51.100.90/443 to inside:10.1.1.40/51500
+Oct 12 14:43:02 FW01 %ASA-6-302015: Built outbound UDP connection for outside:203.0.113.61/53 to inside:10.1.1.5/53
+Oct 12 14:44:10 FW02 %ASA-6-302013: Built outbound TCP connection for outside:203.0.113.62/443 to inside:10.1.2.20/52011
+Oct 12 14:45:55 FW01 %ASA-6-302013: Built outbound TCP connection for outside:192.0.2.88/8080 to inside:10.1.1.20/52222
+Oct 12 14:50:02 VPN01 %ASA-6-113039: Group <VPN-USERS> User <jdoe> IP <203.0.113.10> AnyConnect session established
+Oct 12 15:22:44 VPN01 %ASA-6-113019: Group <VPN-USERS> User <jdoe> IP <203.0.113.10> Session disconnected
+Oct 12 14:52:10 VPN01 %ASA-6-113039: Group <VPN-USERS> User <asharma> IP <198.51.100.77> AnyConnect session established
+Oct 12 16:05:33 VPN01 %ASA-6-113019: Group <VPN-USERS> User <asharma> IP <198.51.100.77> Session disconnected
+Oct 12 14:55:41 VPN01 %ASA-6-113039: Group <CONTRACTORS> User <rkumar> IP <192.0.2.150> AnyConnect session established
+Oct 12 17:01:09 VPN01 %ASA-6-113019: Group <CONTRACTORS> User <rkumar> IP <192.0.2.150> Session disconnected
+Oct 12 15:10:18 FW02 %ASA-4-106023: Deny tcp src outside:203.0.113.200/445 dst inside:10.1.2.5/445 by access-group "OUTSIDE_IN"
+Oct 12 15:12:47 FW02 %ASA-6-302013: Built outbound TCP connection for outside:203.0.113.63/443 to inside:10.1.2.30/53001
