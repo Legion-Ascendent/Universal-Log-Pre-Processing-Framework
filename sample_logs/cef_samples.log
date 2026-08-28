@@ -1,0 +1,18 @@
+CEF:0|PaloAltoNetworks|PAN-OS|10.1|THREAT-001|Firewall Deny|8|rt=1798000000000 src=203.0.113.44 dst=10.1.1.20 spt=51422 dpt=443 proto=tcp act=blocked cat=Traffic
+CEF:0|PaloAltoNetworks|PAN-OS|10.1|THREAT-002|Firewall Allow|2|rt=1798000060000 src=198.51.100.12 dst=10.1.1.25 spt=33110 dpt=443 proto=tcp act=allowed cat=Traffic
+CEF:0|PaloAltoNetworks|PAN-OS|10.1|THREAT-001|Firewall Deny|8|rt=1798000120000 src=192.0.2.90 dst=10.1.2.10 spt=44210 dpt=22 proto=tcp act=blocked cat=Traffic
+CEF:0|PaloAltoNetworks|PAN-OS|10.1|THREAT-003|IDS Alert|10|rt=1798000180000 src=203.0.113.77 dst=10.1.1.30 spt=60112 dpt=445 proto=tcp act=alert cat=Intrusion
+CEF:0|PaloAltoNetworks|PAN-OS|10.1|THREAT-002|Firewall Allow|2|rt=1798000240000 src=198.51.100.55 dst=10.1.2.15 spt=51500 dpt=80 proto=tcp act=allowed cat=Traffic
+CEF:0|PaloAltoNetworks|PAN-OS|10.1|THREAT-001|Firewall Deny|8|rt=1798000300000 src=192.0.2.140 dst=10.1.1.40 spt=22110 dpt=3389 proto=udp act=blocked cat=Traffic
+CEF:0|CheckPoint|FireWall-1|R81|FW-DROP|Firewall Drop|6|rt=1798000360000 src=203.0.113.99 dst=10.1.2.20 spt=41230 dpt=53 proto=udp act=drop cat=Firewall
+CEF:0|CheckPoint|FireWall-1|R81|FW-ACCEPT|Firewall Accept|1|rt=1798000420000 src=198.51.100.61 dst=10.1.1.15 spt=51882 dpt=443 proto=tcp act=allowed cat=Firewall
+CEF:0|CheckPoint|FireWall-1|R81|FW-DROP|Firewall Drop|6|rt=1798000480000 src=192.0.2.200 dst=10.1.2.8 spt=60023 dpt=23 proto=tcp act=drop cat=Firewall
+CEF:0|CheckPoint|FireWall-1|R81|IPS-ALERT|IPS Alert|9|rt=1798000540000 src=203.0.113.201 dst=10.1.1.50 spt=33210 dpt=445 proto=tcp act=alert cat=Intrusion
+CEF:0|CheckPoint|FireWall-1|R81|FW-ACCEPT|Firewall Accept|1|rt=1798000600000 src=198.51.100.88 dst=10.1.2.14 spt=41230 dpt=443 proto=tcp act=allowed cat=Firewall
+CEF:0|CheckPoint|FireWall-1|R81|FW-DROP|Firewall Drop|6|rt=1798000660000 src=192.0.2.33 dst=10.1.1.60 spt=55120 dpt=3389 proto=tcp act=drop cat=Firewall
+CEF:0|Juniper|SRX|21.4|RT-FLOW-DENY|Session Denied|7|rt=1798000720000 src=192.0.2.188 dst=10.1.3.10 spt=33221 dpt=80 proto=tcp act=blocked cat=Traffic
+CEF:0|Juniper|SRX|21.4|RT-FLOW-PERMIT|Session Permitted|3|rt=1798000780000 src=203.0.113.150 dst=10.1.3.20 spt=41022 dpt=443 proto=tcp act=allowed cat=Traffic
+CEF:0|Juniper|SRX|21.4|RT-FLOW-DENY|Session Denied|7|rt=1798000840000 src=198.51.100.190 dst=10.1.3.15 spt=50110 dpt=8443 proto=tcp act=blocked cat=Traffic
+CEF:0|Juniper|SRX|21.4|RT-FLOW-PERMIT|Session Permitted|3|rt=1798000900000 src=192.0.2.44 dst=10.1.3.25 spt=60021 dpt=443 proto=tcp act=allowed cat=Traffic
+CEF:0|Juniper|SRX|21.4|IDP-ALERT|IDP Attack Detected|9|rt=1798000960000 src=203.0.113.201 dst=10.1.3.30 spt=39012 dpt=80 proto=tcp act=alert cat=Intrusion
+CEF:0|Juniper|SRX|21.4|RT-FLOW-DENY|Session Denied|7|rt=1798001020000 src=198.51.100.5 dst=10.1.3.5 spt=44510 dpt=22 proto=tcp act=blocked cat=Traffic
