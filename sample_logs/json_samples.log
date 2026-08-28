@@ -1,0 +1,18 @@
+{"ts": "2026-08-25T14:35:11Z", "device": "ProxyGW1", "src_ip": "198.51.100.9", "dst_ip": "10.1.1.20", "src_port": 51422, "dst_port": 8080, "protocol": "tcp", "action": "blocked", "severity": "high"}
+{"ts": "2026-08-25T14:36:02Z", "device": "ProxyGW1", "src_ip": "203.0.113.14", "dst_ip": "10.1.1.25", "src_port": 33110, "dst_port": 443, "protocol": "tcp", "action": "allowed", "severity": "low"}
+{"ts": "2026-08-25T14:37:45Z", "device": "ProxyGW2", "src_ip": "192.0.2.55", "dst_ip": "10.1.2.12", "src_port": 44210, "dst_port": 80, "protocol": "tcp", "action": "blocked", "severity": "medium"}
+{"ts": "2026-08-25T14:39:20Z", "device": "ProxyGW1", "src_ip": "198.51.100.77", "dst_ip": "10.1.1.30", "src_port": 51500, "dst_port": 443, "protocol": "tcp", "action": "allowed", "severity": "low"}
+{"ts": "2026-08-25T14:41:03Z", "device": "ProxyGW2", "src_ip": "203.0.113.90", "dst_ip": "10.1.2.5", "src_port": 60112, "dst_port": 53, "protocol": "udp", "action": "blocked", "severity": "critical"}
+{"ts": "2026-08-25T14:42:58Z", "device": "ProxyGW1", "src_ip": "192.0.2.101", "dst_ip": "10.1.1.40", "src_port": 22110, "dst_port": 8080, "protocol": "tcp", "action": "allowed", "severity": "low"}
+{"timestamp": "2026-08-25T14:44:12Z", "vendor": "CloudGuard IDS", "source_ip": "203.0.113.45", "destination_ip": "10.1.2.30", "source_port": 44012, "destination_port": 443, "proto": "tcp", "verdict": "alert", "priority": "critical"}
+{"timestamp": "2026-08-25T14:45:33Z", "vendor": "CloudGuard IDS", "source_ip": "198.51.100.61", "destination_ip": "10.1.1.15", "source_port": 51882, "destination_port": 3389, "proto": "tcp", "verdict": "alert", "priority": "high"}
+{"timestamp": "2026-08-25T14:47:10Z", "vendor": "CloudGuard IDS", "source_ip": "192.0.2.200", "destination_ip": "10.1.2.8", "source_port": 60023, "destination_port": 22, "proto": "tcp", "verdict": "denied", "priority": "high"}
+{"timestamp": "2026-08-25T14:48:55Z", "vendor": "CloudGuard IDS", "source_ip": "203.0.113.12", "destination_ip": "10.1.1.50", "source_port": 33210, "destination_port": 445, "proto": "tcp", "verdict": "alert", "priority": "critical"}
+{"timestamp": "2026-08-25T14:50:41Z", "vendor": "CloudGuard IDS", "source_ip": "198.51.100.88", "destination_ip": "10.1.2.14", "source_port": 41230, "destination_port": 443, "proto": "tcp", "verdict": "permitted", "priority": "low"}
+{"timestamp": "2026-08-25T14:52:19Z", "vendor": "CloudGuard IDS", "source_ip": "192.0.2.33", "destination_ip": "10.1.1.60", "source_port": 55120, "destination_port": 53, "proto": "udp", "verdict": "alert", "priority": "medium"}
+{"event_time": "2026-08-25T14:54:02Z", "product": "EdgeWAF", "srcip": "192.0.2.88", "dstip": "10.1.3.10", "sport": 33221, "dport": 80, "action": "allow", "sev": "low"}
+{"event_time": "2026-08-25T14:55:47Z", "product": "EdgeWAF", "srcip": "203.0.113.150", "dstip": "10.1.3.20", "sport": 41022, "dport": 443, "action": "block", "sev": "high"}
+{"event_time": "2026-08-25T14:57:30Z", "product": "EdgeWAF", "srcip": "198.51.100.190", "dstip": "10.1.3.15", "sport": 50110, "dport": 8443, "action": "drop", "sev": "medium"}
+{"event_time": "2026-08-25T14:59:11Z", "product": "EdgeWAF", "srcip": "192.0.2.44", "dstip": "10.1.3.25", "sport": 60021, "dport": 443, "action": "allow", "sev": "low"}
+{"event_time": "2026-08-25T15:01:04Z", "product": "EdgeWAF", "srcip": "203.0.113.201", "dstip": "10.1.3.30", "sport": 39012, "dport": 80, "action": "block", "sev": "high"}
+{"event_time": "2026-08-25T15:02:48Z", "product": "EdgeWAF", "srcip": "198.51.100.5", "dstip": "10.1.3.5", "sport": 44510, "dport": 22, "action": "drop", "sev": "critical"}
