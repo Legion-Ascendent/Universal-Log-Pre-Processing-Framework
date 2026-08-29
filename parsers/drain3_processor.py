@@ -61,6 +61,13 @@ _ACTION_VOCABULARY = {
 
 _template_miner: Optional[TemplateMiner] = None
 
+# Shared by _get_template_miner() (mining/clustering config) AND
+# _tokenize_for_extraction() (our own manual extraction, below) so the two
+# can never drift out of sync. See _extract_values_from_template()'s
+# docstring for why extraction can't just call drain3's own
+# extract_parameters() with this same list.
+_EXTRA_DELIMITERS = ["|", "="]
+
 
 def _get_template_miner() -> TemplateMiner:
     """Lazily builds (and reuses) the module-level Drain3 TemplateMiner.
@@ -87,12 +94,86 @@ def _get_template_miner() -> TemplateMiner:
         # would shred the timestamp into fragments. A combined "IP:PORT"
         # token (e.g. "192.168.5.6:9100") is instead recognized as a single
         # unit directly in _classify_tokens via _IP_PORT_PATTERN.
-        config.drain_extra_delimiters = ["|", "="]
+        # This only affects MINING/clustering (add_log_message) -- it does
+        # NOT affect extraction, which no longer uses drain3's own
+        # extract_parameters() at all (see _extract_values_from_template).
+        config.drain_extra_delimiters = _EXTRA_DELIMITERS
 
         persistence = FilePersistence(DRAIN3_STATE_PATH)
         _template_miner = TemplateMiner(persistence, config=config)
 
     return _template_miner
+
+
+def _tokenize_for_extraction(text: str, delimiters: List[str]) -> List[str]:
+    """Splits text into tokens the same way Drain3's OWN mining/clustering
+    does it internally (drain.py's get_content_as_tokens: each delimiter is
+    replaced as a literal string, then the result is split on whitespace) --
+    deliberately NOT the way drain3's own extract_parameters() does it.
+
+    Compatible with plain whitespace-delimited logs too: if none of
+    `delimiters` appear in `text`, this is equivalent to a plain
+    whitespace split.
+
+    Args:
+        text: the raw text to tokenize.
+        delimiters: literal substrings to treat as token separators, in
+            addition to whitespace (e.g. ["|", "="]).
+
+    Returns:
+        The list of tokens, in order, with no empty tokens.
+    """
+    working_text = text
+    for delimiter in delimiters:
+        working_text = working_text.replace(delimiter, " ")
+    return working_text.split()
+
+
+def _extract_values_from_template(template: Optional[str], raw_text: str) -> List[str]:
+    """Pulls the wildcarded ("<*>") values out of raw_text for a given mined
+    template, WITHOUT calling drain3's own TemplateMiner.extract_parameters().
+
+    That method has a confirmed upstream bug (logpai/Drain3 issue #118,
+    present in v0.9.11): it preprocesses extra_delimiters with
+    re.sub(delimiter, " ", log_message) -- treating each delimiter as a
+    regex PATTERN -- while mining's get_content_as_tokens() treats the same
+    delimiters as LITERAL strings. "=" is harmless either way, but "|" is a
+    regex metacharacter (alternation); re.sub("|", " ", text) matches an
+    empty string at every position and corrupts the whole line, so
+    extract_parameters() silently returns nothing for every pipe-delimited
+    line -- even though mining (which uses the literal path) works fine.
+
+    This function instead re-tokenizes raw_text the same LITERAL way mining
+    does, so tokens line up position-for-position with the mined template's
+    own tokens, then simply reads off whatever sits at each "<*>" position.
+    This only changes how extraction works; it does not touch, call, or
+    change mining/clustering (TemplateMiner.add_log_message) at all.
+
+    Args:
+        template: the mined template string (e.g.
+            "ALRT <*> <*> SRC <*> ACT <*> RULE <*>"), or None if mining
+            didn't produce one.
+        raw_text: the original raw log line.
+
+    Returns:
+        The list of token values found at each "<*>" position, in order.
+        Empty if template is None, or if the two token counts don't line
+        up (i.e. this line doesn't actually match the template's shape).
+    """
+    if not template:
+        return []
+
+    template_tokens = template.split(" ")
+    raw_tokens = _tokenize_for_extraction(raw_text, _EXTRA_DELIMITERS)
+
+    if len(template_tokens) != len(raw_tokens):
+        return []
+
+    return [
+        raw_token
+        for template_token, raw_token in zip(template_tokens, raw_tokens)
+        if template_token == "<*>"
+    ]
 
 
 def _classify_tokens(
@@ -182,14 +263,9 @@ def process_drain3(raw_text: str, raw_event_id: str) -> NormalizedEvent:
 
     try:
         miner = _get_template_miner()
-        result = miner.add_log_message(raw_text)
+        result = miner.add_log_message(raw_text)  # mining/clustering -- unchanged
         template = result.get("template_mined") if result else None
-        extracted = (
-            miner.extract_parameters(template, raw_text, exact_matching=True)
-            if template
-            else None
-        )
-        values = [parameter.value for parameter in extracted] if extracted else []
+        values = _extract_values_from_template(template, raw_text)
 
         src_ip, dst_ip, src_port, dst_port, action, parsed_timestamp = _classify_tokens(values)
         if parsed_timestamp is not None:
