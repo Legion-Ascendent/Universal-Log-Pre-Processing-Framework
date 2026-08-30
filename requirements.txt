@@ -1,3 +1,4 @@
 streamlit==1.38.0
 drain3==0.9.11
-pandas==2.2.2
+pandas==2.3.3
+pytest==9.1.1
