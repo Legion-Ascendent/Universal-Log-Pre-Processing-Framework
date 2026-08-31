@@ -37,6 +37,7 @@ from storage.normalized_store import (
     get_all_normalized_events,
     get_linked_raw_event,
 )
+from dashboard.timezone_utils import to_ist_display
 
 st.set_page_config(page_title="ULPF Dashboard", layout="wide")
 st.title("Universal Log Pre-Processing Framework")
@@ -61,6 +62,13 @@ filtered_events = filter_normalized_events(
     action=None if selected_action == "All" else selected_action,
     ip=ip_filter.strip() or None,
 )
+
+# Convert stored UTC timestamps to IST for display only, right before
+# anything renders. Filtering above already happened in UTC against the
+# database and is unaffected -- only what a person sees on screen changes.
+for _event in filtered_events:
+    _event["timestamp"] = to_ist_display(_event["timestamp"])
+    _event["normalized_at"] = to_ist_display(_event["normalized_at"])
 
 # Live count proving unified visibility across formats (requirement f) --
 # computed over the *filtered* view, so it updates live as filters change.
@@ -101,6 +109,9 @@ if filtered_events:
     else:
         selected_event = filtered_events[selected_rows[0]]
         raw_event = get_linked_raw_event(selected_event["normalized_id"])
+        if raw_event is not None:
+            raw_event = dict(raw_event)  # copy — avoid mutating whatever get_linked_raw_event returned
+            raw_event["ingested_at"] = to_ist_display(raw_event["ingested_at"])
 
         detail_col, raw_col = st.columns(2)
         with detail_col:
