@@ -51,7 +51,7 @@ This is the fastest way to actually see it running.
 
 ```bash
 # 1. Get the code
-git clone <your-repo-url>
+git clone https://github.com/Legion-Ascendent/Universal-Log-Pre-Processing-Framework
 cd Universal-Log-Pre-Processing-Framework
 
 # 2. Build and start the dashboard (one command, does everything)
@@ -86,7 +86,7 @@ Use this instead of Docker if you want to edit code and see changes
 immediately.
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Legion-Ascendent/Universal-Log-Pre-Processing-Framework
 cd Universal-Log-Pre-Processing-Framework
 
 # Create an isolated Python environment so this project's dependencies
