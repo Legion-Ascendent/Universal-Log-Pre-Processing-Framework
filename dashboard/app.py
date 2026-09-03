@@ -39,6 +39,47 @@ from storage.normalized_store import (
 )
 from dashboard.timezone_utils import to_ist_display
 
+# Self-upgrading, same pattern pipeline.py uses for P10/P11: these are
+# optional/stretch phases (P13/P14), so the dashboard must not crash if
+# either hasn't been added to this repo yet -- it just skips those columns.
+try:
+    from enrichment.geoip_lookup import lookup_country
+except ImportError:
+    def lookup_country(ip):
+        return None
+
+try:
+    from enrichment.threat_intel_lookup import is_known_bad_ip
+except ImportError:
+    def is_known_bad_ip(ip):
+        return False
+
+
+def _enrich(event: dict) -> dict:
+    """Adds display-only enrichment and converts timestamps for display."""
+    enriched = dict(event)
+
+    enriched["src_country"] = (
+        lookup_country(event["src_ip"]) if event["src_ip"] else None
+    )
+
+    enriched["src_flagged_bad"] = (
+        is_known_bad_ip(event["src_ip"]) if event["src_ip"] else False
+    )
+
+    enriched["timestamp"] = to_ist_display(event["timestamp"])
+    enriched["normalized_at"] = to_ist_display(event["normalized_at"])
+
+    return enriched
+
+
+_DISPLAY_COLUMNS = [
+    "timestamp", "src_ip", "src_country", "src_flagged_bad", "dst_ip",
+    "src_port", "dst_port", "action", "protocol", "severity",
+    "device_vendor", "source_format", "parser_confidence",
+    "normalized_id", "raw_event_id", "normalized_at",
+]
+
 st.set_page_config(page_title="ULPF Dashboard", layout="wide")
 st.title("Universal Log Pre-Processing Framework")
 
@@ -62,14 +103,10 @@ filtered_events = filter_normalized_events(
     action=None if selected_action == "All" else selected_action,
     ip=ip_filter.strip() or None,
 )
-
-# Convert stored UTC timestamps to IST for display only, right before
-# anything renders. Filtering above already happened in UTC against the
-# database and is unaffected -- only what a person sees on screen changes.
+# Convert stored UTC timestamps to IST for display only.
 for _event in filtered_events:
     _event["timestamp"] = to_ist_display(_event["timestamp"])
     _event["normalized_at"] = to_ist_display(_event["normalized_at"])
-
 # Live count proving unified visibility across formats (requirement f) --
 # computed over the *filtered* view, so it updates live as filters change.
 distinct_formats_in_view = len({event["source_format"] for event in filtered_events})
@@ -91,7 +128,8 @@ st.markdown(
 # ---------------------------------------------------------------------------
 
 if filtered_events:
-    events_df = pd.DataFrame(filtered_events)
+    enriched_events = [_enrich(event) for event in filtered_events]
+    events_df = pd.DataFrame(enriched_events)[_DISPLAY_COLUMNS]
     selection = st.dataframe(
         events_df,
         use_container_width=True,
@@ -107,10 +145,11 @@ if filtered_events:
     if not selected_rows:
         st.caption("Select a row above to see its full normalized event and the original raw log line side by side.")
     else:
-        selected_event = filtered_events[selected_rows[0]]
+        selected_event = enriched_events[selected_rows[0]]
         raw_event = get_linked_raw_event(selected_event["normalized_id"])
+        
         if raw_event is not None:
-            raw_event = dict(raw_event)  # copy — avoid mutating whatever get_linked_raw_event returned
+            raw_event = dict(raw_event)
             raw_event["ingested_at"] = to_ist_display(raw_event["ingested_at"])
 
         detail_col, raw_col = st.columns(2)
