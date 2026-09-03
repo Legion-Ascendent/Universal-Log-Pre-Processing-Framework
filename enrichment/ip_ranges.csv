@@ -1,0 +1,36 @@
+cidr,country
+10.0.0.0/8,United States
+172.16.0.0/16,Germany
+192.168.0.0/16,India
+203.0.113.0/24,United Kingdom
+198.51.100.0/24,Japan
+100.64.0.0/10,Canada
+192.0.2.0/24,France
+198.18.0.0/15,Australia
+172.20.0.0/14,Brazil
+172.24.0.0/14,China
+10.10.0.0/16,Singapore
+10.20.0.0/16,South Korea
+10.30.0.0/16,Netherlands
+10.40.0.0/16,Switzerland
+10.50.0.0/16,Sweden
+10.60.0.0/16,Norway
+10.70.0.0/16,Spain
+10.80.0.0/16,Italy
+10.90.0.0/16,Canada
+10.100.0.0/16,Australia
+172.18.0.0/16,United States
+172.19.0.0/16,United Kingdom
+172.21.0.0/16,India
+172.22.0.0/16,Germany
+172.23.0.0/16,Japan
+192.168.1.0/24,India
+192.168.2.0/24,United States
+192.168.3.0/24,Germany
+192.168.4.0/24,France
+192.168.5.0/24,United Kingdom
+192.168.6.0/24,Japan
+192.168.7.0/24,Australia
+192.168.8.0/24,Singapore
+192.168.9.0/24,Brazil
+192.168.10.0/24,South Korea
