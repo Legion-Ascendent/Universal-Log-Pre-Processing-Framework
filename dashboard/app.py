@@ -55,7 +55,7 @@ except ImportError:
         return False
 
 
-def _enrich(event: dict) -> dict:
+def _enrich(event: dict, show_ist: bool = False) -> dict:
     """Adds display-only enrichment and converts timestamps for display."""
     enriched = dict(event)
 
@@ -67,8 +67,9 @@ def _enrich(event: dict) -> dict:
         is_known_bad_ip(event["src_ip"]) if event["src_ip"] else False
     )
 
-    enriched["timestamp"] = to_ist_display(event["timestamp"])
-    enriched["normalized_at"] = to_ist_display(event["normalized_at"])
+    if show_ist:
+        enriched["timestamp"] = to_ist_display(event["timestamp"])
+        enriched["normalized_at"] = to_ist_display(event["normalized_at"])
 
     return enriched
 
@@ -103,10 +104,6 @@ filtered_events = filter_normalized_events(
     action=None if selected_action == "All" else selected_action,
     ip=ip_filter.strip() or None,
 )
-# Convert stored UTC timestamps to IST for display only.
-for _event in filtered_events:
-    _event["timestamp"] = to_ist_display(_event["timestamp"])
-    _event["normalized_at"] = to_ist_display(_event["normalized_at"])
 # Live count proving unified visibility across formats (requirement f) --
 # computed over the *filtered* view, so it updates live as filters change.
 distinct_formats_in_view = len({event["source_format"] for event in filtered_events})
@@ -127,8 +124,10 @@ st.markdown(
 # Table (now selectable, feeding Phase P16's detail panel) + empty states
 # ---------------------------------------------------------------------------
 
+show_ist = st.toggle("Show timestamps in IST", value=False)
+
 if filtered_events:
-    enriched_events = [_enrich(event) for event in filtered_events]
+    enriched_events = [_enrich(event, show_ist=show_ist) for event in filtered_events]
     events_df = pd.DataFrame(enriched_events)[_DISPLAY_COLUMNS]
     selection = st.dataframe(
         events_df,
@@ -150,7 +149,8 @@ if filtered_events:
         
         if raw_event is not None:
             raw_event = dict(raw_event)
-            raw_event["ingested_at"] = to_ist_display(raw_event["ingested_at"])
+            if show_ist:
+                raw_event["ingested_at"] = to_ist_display(raw_event["ingested_at"])
 
         detail_col, raw_col = st.columns(2)
         with detail_col:

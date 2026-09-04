@@ -17,11 +17,14 @@ from this module inside dashboard code, right before displaying a
 timestamp to someone.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 
-IST = ZoneInfo("Asia/Kolkata")
-_UTC = ZoneInfo("UTC")
+try:
+    IST = ZoneInfo("Asia/Kolkata")
+except Exception:
+    IST = timezone(timedelta(hours=5, minutes=30))
+_UTC = timezone.utc
 
 
 def to_ist_display(utc_iso_string: str) -> str:
